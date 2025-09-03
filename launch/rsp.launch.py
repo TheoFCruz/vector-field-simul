@@ -12,10 +12,11 @@ def generate_launch_description():
     use_sim_time = LaunchConfiguration('use_sim_time')
 
     pkg_path = get_package_share_directory('vector-field-simul')
-    xacro_file = os.path.join(pkg_path, 'description', 'create3_wrapper.urdf.xacro')
+    xacro_file = os.path.join(pkg_path, 'description', 'robot.urdf.xacro')
     robot_description_config = Command([
         'xacro ', xacro_file,
-        ' sim_mode:=', use_sim_time
+        ' sim_mode:=', use_sim_time,
+        ' gazebo:=ignition'
     ])
 
     # Create a robot_state_publisher node

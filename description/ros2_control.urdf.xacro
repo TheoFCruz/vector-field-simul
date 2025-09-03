@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+  <robot xmlns:xacro="http://ros.org/wiki/xacro">
+
+  <ros2_control name="GazeboSystem" type="system">
+    <hardware>
+      <plugin>gz_ros2_control/GazeboSimSystem</plugin>
+    </hardware>
+
+    <join name="left_wheel">
+      <command_interface name="velocity"> 
+        <paramp name="min">-10</paramp>
+        <paramp name="max">10</paramp>
+      </command_interface>
+      <state_interface name="position"/>
+      <state_interface name="velocity"/>
+    </joint>
+    <join name="right_wheel">
+      <command_interface name="velocity"> 
+        <paramp name="min">-10</paramp>
+        <paramp name="max">10</paramp>
+      </command_interface>
+      <state_interface name="position"/>
+      <state_interface name="velocity"/>
+    </joint>
+  </ros2_control>
+
+  <gazebo>
+     <plugin name="gz_ros2_control::GazeboSimROS2ControlPlugin" filename="libgz_ros2_control-system.so">
+        <parameters>$(find vector-field-simul)/config/controllers.yaml</parameters>
+     </plugin>
+  </gazebo>
+
+  </robot>
