@@ -8,6 +8,13 @@ from launch.substitutions import Command, LaunchConfiguration
 from launch_ros.actions import Node
 
 
+ARGUMENTS = [
+    DeclareLaunchArgument(
+        'use_sim_time',
+        default_value='false',
+        description='Use sim time if true'),
+]
+
 def generate_launch_description():
     use_sim_time = LaunchConfiguration('use_sim_time')
 
@@ -33,10 +40,6 @@ def generate_launch_description():
     )
 
     # Launch!
-    return LaunchDescription([
-        DeclareLaunchArgument(
-            'use_sim_time',
-            default_value='false',
-            description='Use sim time if true'),
-        node_robot_state_publisher
-    ])
+    ld = LaunchDescription(ARGUMENTS)
+    ld.add_action(node_robot_state_publisher)
+    return ld
