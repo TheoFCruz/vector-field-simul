@@ -31,9 +31,10 @@ def generate_launch_description():
         [create3_cb_pkg, 'launch', 'create3_nodes.launch.py'])
     robot_description_launch_file = PathJoinSubstitution(
         [create3_cb_pkg, 'launch', 'robot_description.launch.py'])
-    
+    bridge_params = os.path.join(
+        vector_field_simul, 'config', 'ros_gz_bridge.yaml')
 
-    # Create3 Nodes
+    # Create3 Launches
     create3_nodes = IncludeLaunchDescription(
         PythonLaunchDescriptionSource([create3_nodes_launch_file]),
         launch_arguments=[('gazebo', 'ignition')]
@@ -44,7 +45,7 @@ def generate_launch_description():
         launch_arguments=[('gazebo', 'ignition')]
     )
 
-    # Gazebo Node
+    # Gazebo Launch
     gazebo = IncludeLaunchDescription(
         PythonLaunchDescriptionSource([gazebo_launch_file]),
         launch_arguments={
@@ -54,7 +55,6 @@ def generate_launch_description():
     )
 
     # Run the spawner node from the ros_gz_sim package.
-    # The entity name doesn't really matter if you only have a single robot.
     spawn_entity = Node(
         package='ros_gz_sim',
         executable='create',
@@ -64,6 +64,16 @@ def generate_launch_description():
         output='screen'
     )
 
+    ros_gz_bridge = Node(
+        package='ros_gz_bridge',
+        executable='parameter_bridge',
+        arguments=[
+            '--ros-args',
+            '-p',
+            f'config_file:={bridge_params}'
+        ]
+    )
+
     # Actual Launch Description
     ld = LaunchDescription(ARGUMENTS)
 
@@ -71,5 +81,6 @@ def generate_launch_description():
     ld.add_action(robot_description)
     ld.add_action(gazebo)
     ld.add_action(spawn_entity)
+    ld.add_action(ros_gz_bridge)
 
     return ld
