@@ -68,10 +68,19 @@ def generate_launch_description():
         ]
     )
 
+    twist_stamper = Node(
+        package='twist_stamper',
+        executable='twist_stamper',
+        parameters=[{'use_sim_time': True}],
+        remappings=[('/cmd_vel_in','/cmd_vel'),
+                    ('/cmd_vel_out','/diff_drive_controller/cmd_vel')]
+    )
+
     return LaunchDescription([
         rsp,
         world_arg,
         gazebo,
         spawn_entity,
-        ros_gz_bridge
+        ros_gz_bridge,
+        twist_stamper
     ])
