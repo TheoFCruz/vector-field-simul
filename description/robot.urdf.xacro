@@ -1,7 +1,4 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://ros.org/wiki/xacro" name="my_create3">
-
   <xacro:include filename="$(find irobot_create_description)/urdf/create3.urdf.xacro"/>
-  <xacro:include filename="ros2_control.urdf.xacro" />
-
 </robot>
