@@ -7,6 +7,10 @@
   <maintainer email="theofonsecacruz@gmail.com">TheoFCruz</maintainer>
   <license>Apache-2.0</license>
 
+  <depend>rclcpp</depend>
+  <depend>nav_msgs</depend>
+  <depend>geometry_msgs</depend>
+
   <buildtool_depend>ament_cmake</buildtool_depend>
 
   <test_depend>ament_lint_auto</test_depend>

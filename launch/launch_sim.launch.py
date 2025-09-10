@@ -48,6 +48,13 @@ def generate_launch_description():
         }.items()
     )
 
+    # Vector field node
+    vector_field_node = Node(
+        package='vector-field-simul',
+        executable='run_alg',
+        output='screen'
+    )
+
     # Run the spawner node from the ros_gz_sim package. The entity name doesn't really matter if you only have a single robot.
     spawn_entity = Node(
         package='ros_gz_sim',
@@ -111,6 +118,7 @@ def generate_launch_description():
     )
     return LaunchDescription([
         rsp,
+        vector_field_node,
         world_arg,
         gazebo,
         spawn_entity,
