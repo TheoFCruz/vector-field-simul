@@ -1,15 +1,16 @@
+#include <algorithm>
+#include <array>
 #include <cmath>
 #include <functional>
 #include <memory>
+#include <chrono>
 #include <rclcpp/executors.hpp>
-#include <rclcpp/logging.hpp>
-#include <rclcpp/utilities.hpp>
 
 #include "rclcpp/rclcpp.hpp"
-#include "rclcpp/subscription.hpp"
-#include "rclcpp/publisher.hpp"
 #include "nav_msgs/msg/odometry.hpp"
 #include "geometry_msgs/msg/twist.hpp"
+
+#include "algorithm.hpp"
 
 class VectorFieldNode: public rclcpp::Node
 {
@@ -17,11 +18,14 @@ public:
   VectorFieldNode()
   : Node("VectorFieldNode")
   {
-    // Twist Publisher
+    // Twist Publisher and Timer
     twist_publisher = this->create_publisher
       <geometry_msgs::msg::Twist>(
         "/cmd_vel",
         10);     
+    publish_timer = this->create_wall_timer(
+      std::chrono::milliseconds(50),
+      std::bind(&VectorFieldNode::apply_vector_field, this));
 
     // Odom subscriber
     auto sub_callback = std::bind(
@@ -36,32 +40,57 @@ public:
   }
 
 private:
+
+  // ----------- Private Functions ----------------
+  
   // Callback for odometry/position
   void odom_callback(nav_msgs::msg::Odometry::UniquePtr odom) 
   {
     pos_x = odom->pose.pose.position.x; 
     pos_y = odom->pose.pose.position.y; 
     pos_t = quaternion_to_yaw(odom->pose.pose.orientation);
-
-    // RCLCPP_INFO(this->get_logger(),
-    //             "x: %f, y: %f, t: %f",
-    //             pos_x, pos_y, pos_t);
   }
 
   void apply_vector_field()
   {
-    // TODO: Apply vector field algorithm
-    float ux = 0;
-    float uy = 0;
+    RCLCPP_INFO(this->get_logger(),
+                "x: %f, y: %f, t: %f",
+                pos_x, pos_y, pos_t);
+
+    // Circle values
+    constexpr double XC = 0.0;
+    constexpr double YC = 0.0;
+    constexpr double RADIUS = 5.0;
+
+    // Getting linear inputs
+    std::array<double, 2> u = circle_trajectory(XC, YC, RADIUS, pos_x, pos_y);
+    double ux = u[0];
+    double uy = u[1];
+
+    double norm = std::sqrt(ux*ux + uy*uy);
+    if (norm > 1) 
+    {
+      ux = ux/norm; 
+      uy = uy/norm;
+    }
+
+    RCLCPP_INFO(this->get_logger(),
+                "Holonomic input: ux=%.2f, uy=%.2f",
+                ux, uy);
     
+    // Converting to v and w
     auto input = geometry_msgs::msg::Twist();
     input.linear.x = cos(pos_t) * ux + sin(pos_t) * uy;
     input.angular.z = -sin(pos_t) * ux / dist + cos(pos_t) * uy / dist;
 
-    // TODO: Publish the message
+    // Publish the message
+    RCLCPP_INFO(this->get_logger(),
+                "Publishing: v=%.2f, w=%.2f",
+                input.linear.x, input.angular.z);
+    twist_publisher->publish(input);
   }
 
-  float quaternion_to_yaw(const geometry_msgs::msg::Quaternion & q)
+  double quaternion_to_yaw(const geometry_msgs::msg::Quaternion & q)
   {
     double siny_cosp = 2.0 * (q.w * q.z + q.x * q.y);
     double cosy_cosp = 1.0 - 2.0 * (q.y * q.y + q.z * q.z);
@@ -69,17 +98,19 @@ private:
     return std::atan2(siny_cosp, cosy_cosp);
   }
 
+  // ----------- Private Variables ----------------
 
+  rclcpp::TimerBase::SharedPtr publish_timer;
   rclcpp::Publisher<geometry_msgs::msg::Twist>::SharedPtr twist_publisher;
   rclcpp::Subscription<nav_msgs::msg::Odometry>::SharedPtr odom_subscriber;
   
   // Position variables of the robot
-  float pos_x;
-  float pos_y;
-  float pos_t;
+  double pos_x;
+  double pos_y;
+  double pos_t;
 
   // Virtual point distance for control
-  const float dist = 0.05;
+  const double dist = 0.15;
 };
 
 int main (int argc, char *argv[]) {

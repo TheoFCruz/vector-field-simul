@@ -11,11 +11,15 @@ find_package(rclcpp REQUIRED)
 find_package(nav_msgs REQUIRED)
 find_package(geometry_msgs REQUIRED)
 
-add_executable(run_alg src/run_alg.cpp)
-ament_target_dependencies(run_alg rclcpp geometry_msgs nav_msgs)
+include_directories(include include/vector-field-simul)
+add_executable(run_vector_field 
+  src/field_node.cpp
+  src/algorithm.cpp
+)
+ament_target_dependencies(run_vector_field rclcpp geometry_msgs nav_msgs)
 
 install(
-  TARGETS run_alg
+  TARGETS run_vector_field
   DESTINATION lib/${PROJECT_NAME})
 install(
   DIRECTORY launch description worlds config

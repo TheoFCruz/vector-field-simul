@@ -51,7 +51,7 @@ def generate_launch_description():
     # Vector field node
     vector_field_node = Node(
         package='vector-field-simul',
-        executable='run_alg',
+        executable='run_vector_field',
         output='screen'
     )
 
