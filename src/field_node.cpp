@@ -24,7 +24,7 @@ public:
         "/cmd_vel",
         10);     
     publish_timer = this->create_wall_timer(
-      std::chrono::milliseconds(50),
+      std::chrono::milliseconds(100),
       std::bind(&VectorFieldNode::apply_vector_field, this));
 
     // Odom subscriber
@@ -110,7 +110,7 @@ private:
   double pos_t;
 
   // Virtual point distance for control
-  const double dist = 0.15;
+  const double dist = 0.1;
 };
 
 int main (int argc, char *argv[]) {
