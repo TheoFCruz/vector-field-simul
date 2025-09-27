@@ -4,7 +4,7 @@
 #include <array>
 
 // Circulation velocity
-const double VTAN = 0.4;
+const double VTAN = 1;
 
 /**
 * alpha = (x-xc)^2 + (y-yc)^2 - r^2

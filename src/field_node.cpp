@@ -37,6 +37,11 @@ public:
         "/odom",
         10,
         sub_callback);     
+
+    // Trajectory Parameters
+    this->declare_parameter("radius", 1.0);
+    this->declare_parameter("xc", 0.0);
+    this->declare_parameter("yc", 0.0);
   }
 
 private:
@@ -58,12 +63,12 @@ private:
                 pos_x, pos_y, pos_t);
 
     // Circle values
-    constexpr double XC = 0.0;
-    constexpr double YC = 0.0;
-    constexpr double RADIUS = 5.0;
+    double radius = this->get_parameter("radius").as_double();
+    double xc = this->get_parameter("xc").as_double();
+    double yc = this->get_parameter("yc").as_double();
 
     // Getting linear inputs
-    std::array<double, 2> u = circle_trajectory(XC, YC, RADIUS, pos_x, pos_y);
+    std::array<double, 2> u = circle_trajectory(xc, yc, radius, pos_x, pos_y);
     double ux = u[0];
     double uy = u[1];
 

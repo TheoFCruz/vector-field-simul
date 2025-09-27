@@ -52,6 +52,11 @@ def generate_launch_description():
     vector_field_node = Node(
         package='vector-field-simul',
         executable='run_vector_field',
+        parameters=[{
+            'radius': 2.0,
+            'xc': 0.3,
+            'yc': 2.0
+        }],
         output='screen'
     )
 

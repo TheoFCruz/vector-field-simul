@@ -32,4 +32,7 @@ qtcreator-*
 COLCON_IGNORE
 AMENT_IGNORE
 
+# todo file
+todo.txt
+
 # End of https://www.toptal.com/developers/gitignore/api/ros2
