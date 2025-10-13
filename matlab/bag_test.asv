@@ -1,0 +1,7 @@
+clear;
+clc;
+
+bag_dir = fullfile('..', 'bags', 'circle_bag1')
+bag = rosbagreader("../bags/circle_bag1");
+
+bag.AvailableTopics

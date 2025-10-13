@@ -42,6 +42,9 @@ public:
     this->declare_parameter("radius", 1.0);
     this->declare_parameter("xc", 0.0);
     this->declare_parameter("yc", 0.0);
+    
+    // Debug parameter
+    this->declare_parameter("debug", false);
   }
 
 private:
@@ -58,9 +61,6 @@ private:
 
   void apply_vector_field()
   {
-    RCLCPP_INFO(this->get_logger(),
-                "x: %f, y: %f, t: %f",
-                pos_x, pos_y, pos_t);
 
     // Circle values
     double radius = this->get_parameter("radius").as_double();
@@ -79,20 +79,26 @@ private:
       uy = uy/norm;
     }
 
-    RCLCPP_INFO(this->get_logger(),
-                "Holonomic input: ux=%.2f, uy=%.2f",
-                ux, uy);
-    
     // Converting to v and w
     auto input = geometry_msgs::msg::Twist();
     input.linear.x = cos(pos_t) * ux + sin(pos_t) * uy;
     input.angular.z = -sin(pos_t) * ux / dist + cos(pos_t) * uy / dist;
 
     // Publish the message
-    RCLCPP_INFO(this->get_logger(),
-                "Publishing: v=%.2f, w=%.2f",
-                input.linear.x, input.angular.z);
     twist_publisher->publish(input);
+
+    // Debug messages
+    if (this->get_parameter("debug").as_bool()) {
+      RCLCPP_INFO(this->get_logger(),
+                  "x: %f, y: %f, t: %f",
+                  pos_x, pos_y, pos_t);
+      RCLCPP_INFO(this->get_logger(),
+                  "Holonomic input: ux=%.2f, uy=%.2f",
+                  ux, uy);
+      RCLCPP_INFO(this->get_logger(),
+                  "Publishing: v=%.2f, w=%.2f",
+                  input.linear.x, input.angular.z);
+    }
   }
 
   double quaternion_to_yaw(const geometry_msgs::msg::Quaternion & q)

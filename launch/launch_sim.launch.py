@@ -11,6 +11,37 @@ from launch.substitutions import LaunchConfiguration, PathJoinSubstitution
 
 from launch_ros.actions import Node
 
+ARGUMENTS = [
+    # Gazebo param
+    DeclareLaunchArgument(
+        'world',
+        default_value='empty.sdf',
+        description='World to load'
+    ),
+
+    # Main node params
+    DeclareLaunchArgument(
+        'radius',
+        default_value= '1.0',
+        description='Trajectory radius'
+    ),
+    DeclareLaunchArgument(
+        'xc',
+        default_value= '1.0',
+        description='Trajectory center x'
+    ),
+    DeclareLaunchArgument(
+        'yc',
+        default_value= '1.0',
+        description='Trajectory center y'
+    ),
+    DeclareLaunchArgument(
+        'debug',
+        default_value= 'false',
+        description='Prints debug messages'
+    )
+]
+
 def generate_launch_description():
 
     # Package paths
@@ -31,15 +62,9 @@ def generate_launch_description():
         }.items()
     )
 
+    # Include the Gazebo launch file, provided by the ros_gz_sim package
     world = LaunchConfiguration('world')
 
-    world_arg = DeclareLaunchArgument(
-        'world',
-        default_value='empty.sdf',
-        description='World to load'
-        )
-
-    # Include the Gazebo launch file, provided by the ros_gz_sim package
     gazebo = IncludeLaunchDescription(
         PythonLaunchDescriptionSource([gazebo_launch]),
         launch_arguments={
@@ -53,9 +78,9 @@ def generate_launch_description():
         package='vector-field-simul',
         executable='run_vector_field',
         parameters=[{
-            'radius': 2.0,
-            'xc': 0.3,
-            'yc': 2.0
+            'radius': LaunchConfiguration('radius'),
+            'xc': LaunchConfiguration('xc'),
+            'yc': LaunchConfiguration('yc')
         }],
         output='screen'
     )
@@ -121,14 +146,14 @@ def generate_launch_description():
             on_exit=[spawn_diff_drive_controller],
         )
     )
-    return LaunchDescription([
-        rsp,
-        vector_field_node,
-        world_arg,
-        gazebo,
-        spawn_entity,
-        ros_gz_bridge,
-        twist_stamper,
-        load_joint_state_broadcaster,
-        load_diff_drive_controller
-    ])
+
+    ld = LaunchDescription(ARGUMENTS)
+    ld.add_action(rsp);
+    ld.add_action(vector_field_node);
+    ld.add_action(gazebo);
+    ld.add_action(spawn_entity);
+    ld.add_action(ros_gz_bridge);
+    ld.add_action(twist_stamper);
+    ld.add_action(load_joint_state_broadcaster);
+    ld.add_action(load_diff_drive_controller);
+    return ld
