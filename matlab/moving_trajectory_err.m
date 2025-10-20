@@ -1,7 +1,7 @@
-function [u] = circle_trajectory(x, y, R)
-    alpha = x^2 + y^2 - R^2; % Trajectory defintion
+function [u, V] = moving_trajectory_err(x, y, R, vel, t)
+    alpha = (x- vel*t)^2 + y^2 - R^2; % Trajectory defintion
 
-    grad = [2*x, 2*y]; % Alpha gradient
+    grad = [2*(x-vel*t), 2*y]; % Alpha gradient
 
     % Vector tangent to trajectory
     normg = norm(grad); 
@@ -14,4 +14,6 @@ function [u] = circle_trajectory(x, y, R)
     G = 0.1;
     v_tan = 1;
     u = -G*alpha*grad + v_tan*wedge; 
+
+    V = abs(alpha);
 end

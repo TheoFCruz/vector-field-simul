@@ -35,4 +35,7 @@ AMENT_IGNORE
 # Bags folder
 bags
 
+# Matlab autosaves
+*.asv
+
 # End of https://www.toptal.com/developers/gitignore/api/ros2
