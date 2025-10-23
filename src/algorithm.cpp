@@ -26,7 +26,8 @@ std::array<double, 2> circle_trajectory(
   wedge[0] = -grad[1];
   wedge[1] = grad[0];
 
-  double H = VTAN/(2*radius);
+  double vtan = 0.3;
+  double H = vtan/(2*radius); // Normalizes vtan
 
   // Getting the input
   std::array<double, 2> control_input;
@@ -56,14 +57,15 @@ std::array<double, 2> moving_trajectory(
   grad[0] = 2*dx;
   grad[1] = 2*dy;
 
-  double G = 0.1;
+  double G = 0.3;
 
   // Circulation term
   std::array<double, 2> wedge;
   wedge[0] = -grad[1];
   wedge[1] = grad[0];
 
-  double H = VTAN/(2*radius);
+  double vtan = 0.3;
+  double H = vtan/(2*radius);
 
   // Time varying correction term
   std::array<double, 2> P;

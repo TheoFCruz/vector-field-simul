@@ -3,9 +3,6 @@
 
 #include <array>
 
-// Circulation velocity
-const double VTAN = 0.3;
-
 /**
 * alpha = (x-xc)^2 + (y-yc)^2 - r^2
 * grad(alpha) = 2[x-xc, y-yc]

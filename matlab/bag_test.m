@@ -2,7 +2,7 @@ clear;
 clc;
 
 % Creates bag object and gets the messages
-bag = ros2bagreader('bags/moving_bag1/');
+bag = ros2bagreader('bags/moving_bag2/');
 msgs = readMessages(bag);
 
 % Vectors for the x and y positions
@@ -19,4 +19,3 @@ end
 figure; hold on; grid on; axis equal;
 plot(x,y,'b-','LineWidth',1.5);
 xlabel('X [m]'); ylabel('Y [m]');
-title('Trajetória do robô (rosbag2 /odom)');

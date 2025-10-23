@@ -1,7 +1,10 @@
-function [u, V] = moving_trajectory_err(x, y, R, vel, t)
-    alpha = (x- vel*t)^2 + y^2 - R^2; % Trajectory defintion
+function [u, V] = moving_trajectory_err(x, y, xc, yc, R, vel, t)
+    dx = x - (xc+vel*t);
+    dy = y - yc;
 
-    grad = [2*(x-vel*t), 2*y]; % Alpha gradient
+    alpha = dx^2 + dy^2 - R^2; % Trajectory defintion
+
+    grad = [2*dx, 2*dy]; % Alpha gradient
 
     % Vector tangent to trajectory
     normg = norm(grad); 

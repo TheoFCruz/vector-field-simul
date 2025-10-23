@@ -5,28 +5,28 @@ dt = 0.05; % Simulation step
 T = 80; % Simulation span
 N = T/dt; % Number of ticks
 
-q = [0.8, -0.5]; % Initial position of the particle
+q = [0, 0]; % Initial position of the particle
 trajectory_err = zeros(N, 2); % Initialize array to store particle trajectory
 trajectory_err(1, :) = q; % Set initial position in trajectory
 potential_err = zeros(N,1);
 
 % Trajectory without correction term
 for n = 1:N
-    [velocity, V] = moving_trajectory_err(q(1), q(2), 2, 0.1, n*dt); % Constant velocity in the x-direction
-    velocity = max(-1, min(velocity, 1));
+    [velocity, V] = moving_trajectory_err(q(1), q(2), -0.8, 0.5, 2, 0.1, n*dt); % Constant velocity in the x-direction
+    velocity = max(-0.46, min(velocity, 0.46));
     q = q + velocity * dt; % Update position
     trajectory_err(n + 1, :) = q; % Store new position in trajectory
     potential_err(n) = V;
 end
 
-q = [0.8, -0.5];
+q = [0, 0];
 trajectory_wp = zeros(N,2);
 potential_wp = zeros(N,1);
 
 % Trajectory with correction term
 for n = 1:N
-    [velocity, V] = moving_trajectory_wp(q(1), q(2), 2, 0.1, n*dt); % Constant velocity in the x-direction
-    velocity = max(-1, min(velocity, 1));
+    [velocity, V] = moving_trajectory_wp(q(1), q(2), -0.8, 0.5, 2, 0.1, n*dt); % Constant velocity in the x-direction
+    velocity = max(-0.46, min(velocity, 0.46));
     q = q + velocity * dt; % Update position
     trajectory_wp(n + 1, :) = q; % Store new position in trajectory
     potential_wp(n) = V;
