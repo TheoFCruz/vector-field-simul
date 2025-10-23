@@ -20,7 +20,7 @@ function [u, V] = moving_trajectory_wp(x, y, R, vel, t)
     P = -(M\a)';
 
     G = 0.3;
-    v_tan = 1;
+    v_tan = 0.5;
     u = -G*alpha*grad + v_tan*wedge + P; 
 
     V = abs(alpha);

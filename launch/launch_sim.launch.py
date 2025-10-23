@@ -22,17 +22,17 @@ ARGUMENTS = [
     # Main node params
     DeclareLaunchArgument(
         'radius',
-        default_value= '1.0',
+        default_value= '2.0',
         description='Trajectory radius'
     ),
     DeclareLaunchArgument(
         'xc',
-        default_value= '1.0',
+        default_value= '-0.8',
         description='Trajectory center x'
     ),
     DeclareLaunchArgument(
         'yc',
-        default_value= '1.0',
+        default_value= '0.5',
         description='Trajectory center y'
     ),
     DeclareLaunchArgument(
@@ -80,7 +80,8 @@ def generate_launch_description():
         parameters=[{
             'radius': LaunchConfiguration('radius'),
             'xc': LaunchConfiguration('xc'),
-            'yc': LaunchConfiguration('yc')
+            'yc': LaunchConfiguration('yc'),
+            'use_sim_time': True
         }],
         output='screen'
     )

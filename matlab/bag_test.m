@@ -2,7 +2,7 @@ clear;
 clc;
 
 % Creates bag object and gets the messages
-bag = ros2bagreader('bags/circle_bag1/');
+bag = ros2bagreader('bags/moving_bag1/');
 msgs = readMessages(bag);
 
 % Vectors for the x and y positions

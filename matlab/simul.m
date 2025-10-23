@@ -2,7 +2,7 @@ clear
 clc
 
 dt = 0.05; % Simulation step
-T = 50; % Simulation span
+T = 80; % Simulation span
 N = T/dt; % Number of ticks
 
 q = [0.8, -0.5]; % Initial position of the particle
@@ -50,8 +50,8 @@ ax.FontSize = 14;
 
 % Set axis
 margin = 0.5;
-xlims = [min(trajectory_err(:,1))-margin, max(trajectory_err(:,1))+margin];
-ylims = [min(trajectory_err(:,2))-margin, max(trajectory_err(:,2))+margin];
+xlims = [min(trajectory_wp(:,1))-margin, max(trajectory_wp(:,1))+margin];
+ylims = [min(trajectory_wp(:,2))-margin, max(trajectory_wp(:,2))+margin];
 axis([xlims, ylims]);
 axis equal;
 

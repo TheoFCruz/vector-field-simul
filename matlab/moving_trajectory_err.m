@@ -12,7 +12,7 @@ function [u, V] = moving_trajectory_err(x, y, R, vel, t)
     end
 
     G = 0.1;
-    v_tan = 1;
+    v_tan = 0.3;
     u = -G*alpha*grad + v_tan*wedge; 
 
     V = abs(alpha);

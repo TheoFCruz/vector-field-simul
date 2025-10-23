@@ -5,6 +5,8 @@
 #include <memory>
 #include <chrono>
 #include <rclcpp/executors.hpp>
+#include <rclcpp/logging.hpp>
+#include <rclcpp/time.hpp>
 
 #include "rclcpp/rclcpp.hpp"
 #include "nav_msgs/msg/odometry.hpp"
@@ -45,6 +47,9 @@ public:
     
     // Debug parameter
     this->declare_parameter("debug", false);
+
+    // Initialize t0
+    t0 = this->get_clock()->now();
   }
 
 private:
@@ -68,7 +73,9 @@ private:
     double yc = this->get_parameter("yc").as_double();
 
     // Getting linear inputs
-    std::array<double, 2> u = circle_trajectory(xc, yc, radius, pos_x, pos_y);
+    // std::array<double, 2> u = circle_trajectory(xc, yc, radius, pos_x, pos_y);
+    double now = this->get_clock()->now().seconds() - t0.seconds();
+    std::array<double, 2> u = moving_trajectory(xc, yc, radius, pos_x, pos_y, 0.1, now);
     double ux = u[0];
     double uy = u[1];
 
@@ -122,6 +129,9 @@ private:
 
   // Virtual point distance for control
   const double dist = 0.1;
+
+  // Node start instant
+  rclcpp::Time t0;
 };
 
 int main (int argc, char *argv[]) {
