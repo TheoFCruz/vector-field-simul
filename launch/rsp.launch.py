@@ -18,7 +18,7 @@ ARGUMENTS = [
 def generate_launch_description():
     use_sim_time = LaunchConfiguration('use_sim_time')
 
-    pkg_path = get_package_share_directory('vector-field-simul')
+    pkg_path = get_package_share_directory('vector_field_simul')
     xacro_file = os.path.join(pkg_path, 'description', 'robot.urdf.xacro')
     robot_description_config = Command([
         'xacro ', xacro_file,

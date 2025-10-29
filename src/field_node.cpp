@@ -1,16 +1,14 @@
-#include <algorithm>
 #include <array>
 #include <cmath>
 #include <functional>
 #include <memory>
 #include <chrono>
-#include <rclcpp/executors.hpp>
-#include <rclcpp/logging.hpp>
-#include <rclcpp/time.hpp>
+#include <rclcpp/publisher.hpp>
 
 #include "rclcpp/rclcpp.hpp"
 #include "nav_msgs/msg/odometry.hpp"
 #include "geometry_msgs/msg/twist.hpp"
+#include "vector_field_simul/msg/potential.hpp"
 
 #include "algorithm.hpp"
 
@@ -119,8 +117,9 @@ private:
   // ----------- Private Variables ----------------
 
   rclcpp::TimerBase::SharedPtr publish_timer;
-  rclcpp::Publisher<geometry_msgs::msg::Twist>::SharedPtr twist_publisher;
   rclcpp::Subscription<nav_msgs::msg::Odometry>::SharedPtr odom_subscriber;
+  rclcpp::Publisher<geometry_msgs::msg::Twist>::SharedPtr twist_publisher;
+  rclcpp::Publisher<vector_field_simul::msg::Potential>::SharedPtr potential_publisher;
   
   // Position variables of the robot
   double pos_x;

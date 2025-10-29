@@ -45,7 +45,7 @@ ARGUMENTS = [
 def generate_launch_description():
 
     # Package paths
-    vector_field_simul_pkg = get_package_share_directory('vector-field-simul')
+    vector_field_simul_pkg = get_package_share_directory('vector_field_simul')
     gazebo_pkg = get_package_share_directory('ros_gz_sim')
 
     # Launch paths
@@ -75,7 +75,7 @@ def generate_launch_description():
 
     # Vector field node
     vector_field_node = Node(
-        package='vector-field-simul',
+        package='vector_field_simul',
         executable='run_vector_field',
         parameters=[{
             'radius': LaunchConfiguration('radius'),
