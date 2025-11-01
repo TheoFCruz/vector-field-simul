@@ -2,7 +2,7 @@
 #include <array>
 #include <cstdio>
 
-std::array<double, 2> circle_trajectory(
+std::array<double, 3> circle_trajectory(
   double xc,
   double yc,
   double radius,
@@ -31,14 +31,19 @@ std::array<double, 2> circle_trajectory(
 
   // Getting the input
   std::array<double, 2> control_input;
-
   control_input[0] = -G*alpha*grad[0] + H*wedge[0];
   control_input[1] = -G*alpha*grad[1] + H*wedge[1];
 
-  return control_input;
+  // Returns the input and the potential
+  std::array<double, 3> return_arr;
+  return_arr[0] = control_input[0];
+  return_arr[1] = control_input[1];
+  return_arr[2] = 0.5*alpha*alpha;
+
+  return return_arr;
 }
 
-std::array<double, 2> moving_trajectory(
+std::array<double, 3> moving_trajectory(
   double xc0,
   double yc0,
   double radius,
@@ -80,5 +85,11 @@ std::array<double, 2> moving_trajectory(
   control_input[0] = -G*alpha*grad[0] + H*wedge[0] + P[0];
   control_input[1] = -G*alpha*grad[1] + H*wedge[1] + P[1];
 
-  return control_input;
+  // Returns the input and the potential
+  std::array<double, 3> return_arr;
+  return_arr[0] = control_input[0];
+  return_arr[1] = control_input[1];
+  return_arr[2] = 0.5*alpha*alpha;
+
+  return return_arr;
 }

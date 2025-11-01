@@ -8,8 +8,10 @@
 * grad(alpha) = 2[x-xc, y-yc]
 *
 * V = 0.5*alpha^2
+*
+* @return [u1, u2, V]
 */
-std::array<double, 2> circle_trajectory(
+std::array<double, 3> circle_trajectory(
   double xc,
   double xy,
   double radius,
@@ -17,7 +19,12 @@ std::array<double, 2> circle_trajectory(
   double pos_y
 );
 
-std::array<double, 2> moving_trajectory(
+/**
+* P = M^-1 * a
+*
+* @return [u1, u2, V]
+*/
+std::array<double, 3> moving_trajectory(
   double xc0,
   double xy0,
   double radius,

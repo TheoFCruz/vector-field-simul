@@ -8,7 +8,7 @@
 #include "rclcpp/rclcpp.hpp"
 #include "nav_msgs/msg/odometry.hpp"
 #include "geometry_msgs/msg/twist.hpp"
-#include "vector_field_simul/msg/potential.hpp"
+#include "example_interfaces/msg/float64.hpp"
 
 #include "algorithm.hpp"
 
@@ -26,6 +26,12 @@ public:
     publish_timer = this->create_wall_timer(
       std::chrono::milliseconds(100),
       std::bind(&VectorFieldNode::apply_vector_field, this));
+
+    // Publisher for potential
+    potential_publisher = this->create_publisher
+      <example_interfaces::msg::Float64>(
+        "/potential",
+        10);     
 
     // Odom subscriber
     auto sub_callback = std::bind(
@@ -71,11 +77,15 @@ private:
     double yc = this->get_parameter("yc").as_double();
 
     // Getting linear inputs
-    // std::array<double, 2> u = circle_trajectory(xc, yc, radius, pos_x, pos_y);
+    // std::array<double, 3> ret_arr = circle_trajectory(xc, yc, radius,
+    //                                                   pos_x, pos_y);
+    
     double now = this->get_clock()->now().seconds() - t0.seconds();
-    std::array<double, 2> u = moving_trajectory(xc, yc, radius, pos_x, pos_y, 0.1, now);
-    double ux = u[0];
-    double uy = u[1];
+    std::array<double, 3> ret_arr = moving_trajectory(xc, yc, radius,
+                                                      pos_x, pos_y,
+                                                      0.1, now);
+    double ux = ret_arr[0];
+    double uy = ret_arr[1];
 
     double norm = std::sqrt(ux*ux + uy*uy);
     if (norm > 1) 
@@ -91,6 +101,14 @@ private:
 
     // Publish the message
     twist_publisher->publish(input);
+    
+    // Creates potential message and publishes it
+    auto pot_msg = example_interfaces::msg::Float64();
+    pot_msg.data = ret_arr[2];
+    RCLCPP_INFO(this->get_logger(),
+                "v: %lf",
+                pot_msg.data);
+    potential_publisher->publish(pot_msg);
 
     // Debug messages
     if (this->get_parameter("debug").as_bool()) {
@@ -119,7 +137,7 @@ private:
   rclcpp::TimerBase::SharedPtr publish_timer;
   rclcpp::Subscription<nav_msgs::msg::Odometry>::SharedPtr odom_subscriber;
   rclcpp::Publisher<geometry_msgs::msg::Twist>::SharedPtr twist_publisher;
-  rclcpp::Publisher<vector_field_simul::msg::Potential>::SharedPtr potential_publisher;
+  rclcpp::Publisher<example_interfaces::msg::Float64>::SharedPtr potential_publisher;
   
   // Position variables of the robot
   double pos_x;

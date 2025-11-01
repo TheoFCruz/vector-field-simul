@@ -10,22 +10,18 @@ find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(nav_msgs REQUIRED)
 find_package(geometry_msgs REQUIRED)
-find_package(rosidl_default_generators REQUIRED)
+find_package(example_interfaces REQUIRED)
 
 include_directories(include include/vector_field_simul)
 add_executable(run_vector_field 
   src/field_node.cpp
   src/algorithm.cpp
 )
-ament_target_dependencies(run_vector_field rclcpp geometry_msgs nav_msgs)
-
-rosidl_generate_interfaces(${PROJECT_NAME}
-  "msg/Potential.msg"
-)
-
-# Necessary for using custom msg
-rosidl_get_typesupport_target(cpp_typesupport_target
-  ${PROJECT_NAME} rosidl_typesupport_cpp)
+ament_target_dependencies(run_vector_field 
+  rclcpp
+  geometry_msgs
+  example_interfaces
+  nav_msgs)
 
 target_link_libraries(run_vector_field "${cpp_typesupport_target}")
 
