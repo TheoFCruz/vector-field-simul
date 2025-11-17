@@ -1,9 +1,10 @@
-<?xml version="1.0"?>
+<?xml version="1.0" ?>
 <?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
 <package format="3">
   <name>vector_field_simul</name>
   <version>0.0.0</version>
-  <description>Simulation of a vector field algorithm with iRobot Create</description>
+  <description
+    >Simulation of a vector field algorithm with iRobot Create</description>
   <maintainer email="theofonsecacruz@gmail.com">TheoFCruz</maintainer>
   <license>Apache-2.0</license>
 
@@ -11,6 +12,9 @@
   <depend>nav_msgs</depend>
   <depend>geometry_msgs</depend>
   <depend>example_interfaces</depend>
+  <depend>ros2_control</depend>
+  <depend>ros2_controllers</depend>
+  <depend>gz_ros2_control</depend>
 
   <buildtool_depend>ament_cmake</buildtool_depend>
 
@@ -18,7 +22,8 @@
   <test_depend>ament_lint_common</test_depend>
 
   <exec_depend>irobot_create_description</exec_depend>
-  <exec_depend>gazebo_ros</exec_depend>
+  <depend>ros_gz</depend>
+  <depend>ros_gz_sim</depend>
   <exec_depend>robot_state_publisher</exec_depend>
   <exec_depend>xacro</exec_depend>
 

@@ -1,4 +1,5 @@
 #include "algorithm.hpp"
+
 #include <array>
 #include <cstdio>
 
@@ -74,7 +75,7 @@ std::array<double, 3> moving_trajectory(
 
   // Time varying correction term
   std::array<double, 2> P;
-  
+
   double r2 = dx*dx + dy*dy;
   P[0] = (vel_x*dx/r2)*dx;
   P[1] = (vel_x*dx/r2)*dy;
